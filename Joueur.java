@@ -12,12 +12,15 @@ package fr.gns;
 public class Joueur {
     private String nom;
     private String mdp;
+    private String pays;
     private char genre;
     private boolean cgu;
     
-    public Joueur(String nom, String mdp, char genre, boolean cgu){
+    
+    public Joueur(String nom, String mdp, String pays, char genre, boolean cgu){
         this.nom = nom;
         this.mdp = mdp;
+        this.pays = pays;
         this.genre = genre;
         this.cgu = cgu;
     }
@@ -38,6 +41,14 @@ public class Joueur {
         this.mdp = mdp;
     }
     
+    public String getPays(){
+        return pays;
+    }
+    
+    public void setPays(){
+        this.pays = pays;
+    }
+    
     public char getGenre(){
         return genre;
     }
@@ -56,7 +67,7 @@ public class Joueur {
     
     @Override
     public String toString(){
-        return "Joueur[nom : " + nom + ", mdp : " + mdp + ", genre : " + genre +
+        return "Joueur[nom : " + nom + ", mdp : " + mdp + ", pays : " + pays +", genre : " + genre +
                 ", cgu : " + cgu + "]";
     }
     
