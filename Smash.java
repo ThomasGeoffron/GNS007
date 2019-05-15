@@ -23,6 +23,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 
@@ -43,7 +44,13 @@ public class Smash extends Application {
         nom.setText("Nom : ");
         
         Label mdp = new Label();
-        mdp.setText("Mot de passe : ");      
+        mdp.setText("Mot de passe : ");
+        
+        Label verif = new Label();
+        verif.setText("Vérification : ");
+        
+        Label pays = new Label();
+        pays.setText("Pays : ");
         
         TextField saisieNom = new TextField();
         saisieNom.setPromptText("Saisir le nom du joueur");
@@ -51,11 +58,21 @@ public class Smash extends Application {
         PasswordField saisieMDP = new PasswordField();
         saisieMDP.setPromptText("Saisir le mot de passe");
         
+        PasswordField saisieVerif = new PasswordField();
+        saisieVerif.setPromptText("Vérifier le mot de passe");
+        
+        ComboBox<String> saisiePays = new ComboBox<String>();
+        saisiePays.setPromptText("Choisissez un pays");
+        saisiePays.getItems().addAll("France", "Espagne", "Allemagne", "Pologne", "Portugal", "Angleterre", "Écosse",
+                               "Pays de Galle", "Irlande du Nord", "Irlande", "Italie");
+        saisiePays.setVisibleRowCount(5);
+        
         ToggleGroup genre = new ToggleGroup();  
         RadioButton genreH = new RadioButton("Homme");
         RadioButton genreF = new RadioButton("Femme");
         genreH.setToggleGroup(genre);
         genreF.setToggleGroup(genre);
+        genreH.setSelected(true);
         
         CheckBox CGU = new CheckBox("Acceptez les conditions générales d'utilisation.");
         
@@ -69,12 +86,13 @@ public class Smash extends Application {
             
             @Override
             public void handle(ActionEvent event) {
+                if(saisieMDP.getText().equals(saisieVerif.getText())){
                     if(genreH.isSelected()){
-                        Joueur joueur = new Joueur(saisieNom.getText(), saisieMDP.getText(), 'H', CGU.isSelected());
+                        Joueur joueur = new Joueur(saisieNom.getText(), saisieMDP.getText(), saisiePays.getValue(),'H', CGU.isSelected());
                         System.out.println(joueur.toString());
                     }
                     if(genreF.isSelected()){
-                        Joueur joueur = new Joueur(saisieNom.getText(), saisieMDP.getText(), 'F', CGU.isSelected());
+                        Joueur joueur = new Joueur(saisieNom.getText(), saisieMDP.getText(), saisiePays.getValue(),'F', CGU.isSelected());
                         System.out.println(joueur.toString());
                     }
                     
@@ -84,11 +102,29 @@ public class Smash extends Application {
                     reussie.setContentText("Le joueur a bien été créé !");
                     reussie.showAndWait();
                     
+                }
+                else{
+                    Alert erreur = new Alert(AlertType.ERROR);
+                    erreur.setTitle("Échec...");
+                    erreur.setHeaderText(null);// No header
+                    erreur.setContentText("Échec de création du joueur...");
+                    erreur.showAndWait();
+                }
             }
         });
             
-        
-        
+        annuler.setOnAction(new EventHandler<ActionEvent>() {
+            
+            @Override
+            public void handle(ActionEvent event) {
+                saisieNom.setText("");
+                saisieMDP.setText("");
+                saisieVerif.setText("");
+                saisiePays.getSelectionModel().clearSelection();
+                genreH.setSelected(true);
+                CGU.setSelected(false);
+            }
+        });
         
         
         VBox root = new VBox(6);
@@ -97,16 +133,21 @@ public class Smash extends Application {
         boxNom.getChildren().addAll(nom, saisieNom);
         
         HBox boxMDP = new HBox();
-        boxMDP.getChildren().addAll(mdp, saisieMDP);       
+        boxMDP.getChildren().addAll(mdp, saisieMDP);
+        
+        HBox boxVerif = new HBox();
+        boxVerif.getChildren().addAll(verif, saisieVerif);
+        
+        HBox boxPays = new HBox();
+        boxPays.getChildren().addAll(pays, saisiePays);
         
         HBox boxRadio = new HBox();
         boxRadio.getChildren().addAll(genreH, genreF);
         
         HBox boxButton = new HBox();
         boxButton.getChildren().addAll(annuler, valider);
-        
       
-        root.getChildren().addAll(titre, boxNom, boxMDP, boxRadio, CGU,boxButton);
+        root.getChildren().addAll(titre, boxNom, boxMDP, boxVerif, boxPays, boxRadio, CGU,boxButton);
         Scene scene = new Scene(root, 350, 250);
         root.setPadding(new Insets(10));
         
