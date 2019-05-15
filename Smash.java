@@ -43,13 +43,19 @@ public class Smash extends Application {
         nom.setText("Nom : ");
         
         Label mdp = new Label();
-        mdp.setText("Mot de passe : ");      
+        mdp.setText("Mot de passe : ");
+        
+        Label verif = new Label();
+        verif.setText("Vérification : ");
         
         TextField saisieNom = new TextField();
         saisieNom.setPromptText("Saisir le nom du joueur");
         
         PasswordField saisieMDP = new PasswordField();
         saisieMDP.setPromptText("Saisir le mot de passe");
+        
+        PasswordField saisieVerif = new PasswordField();
+        saisieVerif.setPromptText("Vérifier le mot de passe");
         
         ToggleGroup genre = new ToggleGroup();  
         RadioButton genreH = new RadioButton("Homme");
@@ -69,6 +75,7 @@ public class Smash extends Application {
             
             @Override
             public void handle(ActionEvent event) {
+                if(saisieMDP.getText().equals(saisieVerif.getText())){
                     if(genreH.isSelected()){
                         Joueur joueur = new Joueur(saisieNom.getText(), saisieMDP.getText(), 'H', CGU.isSelected());
                         System.out.println(joueur.toString());
@@ -84,6 +91,14 @@ public class Smash extends Application {
                     reussie.setContentText("Le joueur a bien été créé !");
                     reussie.showAndWait();
                     
+                }
+                else{
+                    Alert erreur = new Alert(AlertType.ERROR);
+                    erreur.setTitle("Échec...");
+                    erreur.setHeaderText(null);// No header
+                    erreur.setContentText("Échec de création du joueur...");
+                    erreur.showAndWait();
+                }
             }
         });
             
@@ -97,7 +112,10 @@ public class Smash extends Application {
         boxNom.getChildren().addAll(nom, saisieNom);
         
         HBox boxMDP = new HBox();
-        boxMDP.getChildren().addAll(mdp, saisieMDP);       
+        boxMDP.getChildren().addAll(mdp, saisieMDP);
+        
+        HBox boxVerif = new HBox();
+        boxVerif.getChildren().addAll(verif, saisieVerif);
         
         HBox boxRadio = new HBox();
         boxRadio.getChildren().addAll(genreH, genreF);
@@ -106,7 +124,7 @@ public class Smash extends Application {
         boxButton.getChildren().addAll(annuler, valider);
         
       
-        root.getChildren().addAll(titre, boxNom, boxMDP, boxRadio, CGU,boxButton);
+        root.getChildren().addAll(titre, boxNom, boxMDP, boxVerif, boxRadio, CGU,boxButton);
         Scene scene = new Scene(root, 350, 250);
         root.setPadding(new Insets(10));
         
